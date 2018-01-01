@@ -4,6 +4,9 @@
   "private": true,
   "author": "shioyang <shioyang4321@gmail.com>",
   "description": "A simple helpful robot for your Company",
+  "scripts": {
+    "start": "./bin/hubot --adapter slack"
+  },
   "dependencies": {
     "hubot": "^2.19.0",
     "hubot-diagnostics": "0.0.2",
