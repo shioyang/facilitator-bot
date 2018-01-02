@@ -16,6 +16,9 @@ module.exports = (robot) ->
 
         if res.statusCode is 302
           msg.send "Request came back HTTP 302. The resource was found, should redirect to the location URL."
+          location = res.headers['location'] if res.headers['location']
+          if location
+            msg.send "  ->> #{location}"
           return
 
         if res.statusCode isnt 200
