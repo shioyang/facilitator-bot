@@ -1,3 +1,4 @@
+libxmljs = require 'libxmljs'
 
 module.exports = (robot) ->
 
@@ -26,4 +27,10 @@ module.exports = (robot) ->
           return
 
         msg.send "Got #{msg.match[1]}"
+
+        xmlDoc = libxmljs.parseHtmlString(body)
+        title = xmlDoc.get('//title').text().trim()
+
+        if title
+          msg.send "  Title: #{title}"
 
