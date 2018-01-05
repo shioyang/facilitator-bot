@@ -1,5 +1,8 @@
 libxmljs = require 'libxmljs'
 
+dialogue_api = "https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=" + process.env.HUBOT_DIALOGUE_APIKEY
+
+
 module.exports = (robot) ->
 
   robot.hear /hello/i, (res) ->
@@ -31,6 +34,25 @@ module.exports = (robot) ->
         xmlDoc = libxmljs.parseHtmlString(body)
         title = xmlDoc.get('//title').text().trim()
 
-        if title
-          msg.send "  Title: #{title}"
+        msg.send "  Title: #{title}" if title
+
+        obj =
+          utt: ""
+          context: ""
+          nickname: "Hikari"
+          nickname_y: "ヒカリ"
+          age: "30"
+          place: "東京"
+
+        obj.utt = title if title
+        data = JSON.stringify(obj)
+        robot.http(dialogue_api)
+          .header('Content-Type', 'application/json')
+          .post(data) (err, res, body) ->
+            if err
+              msg.send "Encountered an error :( #{err}"
+              return
+
+            body_obj = JSON.parse body
+            msg.send "Got #{body_obj.utt}"
 
