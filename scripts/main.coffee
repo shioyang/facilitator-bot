@@ -5,12 +5,13 @@ dialogue_api = "https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY="
 
 module.exports = (robot) ->
 
+
   robot.hear /hello/i, (res) ->
-    res.send "Hello! 1"
-    res.send "Hello! 2"
+    res.send "Hello!"
+
 
   robot.hear /(h?ttps?:\/\/[-a-zA-Z0-9@:%_\+.~#?&\/=]+)/i, (msg) ->
-    msg.send "URL: #{msg.match[1]}"
+    console.log "URL: #{msg.match[1]}"
 
     robot.http(msg.match[1])
       .get() (err, res, body) ->
@@ -29,30 +30,27 @@ module.exports = (robot) ->
           msg.send "Request didn't come back HTTP 200 :( #{res.statusCode}"
           return
 
-        msg.send "Got #{msg.match[1]}"
+        console.log "Got #{msg.match[1]}"
 
         xmlDoc = libxmljs.parseHtmlString(body)
         title = xmlDoc.get('//title').text().trim()
 
-        msg.send "  Title: #{title}" if title
+        if title
+          console.log "  Title: #{title}"
 
-        obj =
-          utt: ""
-          context: ""
-          nickname: "Hikari"
-          nickname_y: "ヒカリ"
-          age: "30"
-          place: "東京"
-
-        obj.utt = title if title
-        data = JSON.stringify(obj)
-        robot.http(dialogue_api)
-          .header('Content-Type', 'application/json')
-          .post(data) (err, res, body) ->
-            if err
-              msg.send "Encountered an error :( #{err}"
-              return
-
-            body_obj = JSON.parse body
-            msg.send "Got #{body_obj.utt}"
+          obj =
+            utt: ""
+            age: "30"
+  
+          obj.utt = title if title
+          data = JSON.stringify(obj)
+          robot.http(dialogue_api)
+            .header('Content-Type', 'application/json')
+            .post(data) (err, res, body) ->
+              if err
+                msg.send "Encountered an error :( #{err}"
+                return
+  
+              body_obj = JSON.parse body
+              msg.send "#{body_obj.utt}" if body_obj.utt
 
