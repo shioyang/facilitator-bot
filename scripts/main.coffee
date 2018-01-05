@@ -1,5 +1,9 @@
 libxmljs = require 'libxmljs'
 
+###
+  docomo dialogue API
+    https://dev.smt.docomo.ne.jp/?p=docs.api.page&api_name=dialogue&p_name=api_usage_scenario
+###
 dialogue_api = "https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY=" + process.env.HUBOT_DIALOGUE_APIKEY
 
 
@@ -11,7 +15,7 @@ module.exports = (robot) ->
 
 
   robot.hear /(h?ttps?:\/\/[-a-zA-Z0-9@:%_\+.~#?&\/=]+)/i, (msg) ->
-    console.log "URL: #{msg.match[1]}"
+    console.log "[facilitator] URL: #{msg.match[1]}"
 
     robot.http(msg.match[1])
       .get() (err, res, body) ->
@@ -30,13 +34,13 @@ module.exports = (robot) ->
           msg.send "Request didn't come back HTTP 200 :( #{res.statusCode}"
           return
 
-        console.log "Got #{msg.match[1]}"
+        console.log "[facilitator] Got #{msg.match[1]}"
 
         xmlDoc = libxmljs.parseHtmlString(body)
         title = xmlDoc.get('//title').text().trim()
 
         if title
-          console.log "  Title: #{title}"
+          console.log "[facilitator]   Title: #{title}"
 
           obj =
             utt: ""
