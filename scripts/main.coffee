@@ -56,5 +56,11 @@ module.exports = (robot) ->
                 return
   
               body_obj = JSON.parse body
-              msg.send "#{body_obj.utt}" if body_obj.utt
+              # Wait for wait_sec sec
+              wait_sec_list = [30, 40, 50, 60]
+              wait_sec = msg.random wait_sec_list
+              console.log "wait #{wait_sec} sec..."
+              setTimeout ->
+                msg.send "#{body_obj.utt}" if body_obj.utt
+              , wait_sec * 1000
 
