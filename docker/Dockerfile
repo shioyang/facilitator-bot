@@ -11,16 +11,18 @@ RUN apt-get update
 RUN npm install -g coffee-script
 
 # clone facilitator-bot
+WORKDIR /root
 RUN git clone https://github.com/shioyang/facilitator-bot.git
 
 # get required node modules
+WORKDIR /root/facilitator-bot
 RUN npm install
 
 # set env
 ENV HUBOT_SLACK_TOKEN=dummy
 ENV HUBOT_DIALOGUE_APIKEY=dummy
 
-#CMD npm start
+CMD npm start
 
 ######
 # Should replace these two enviroment variables.
