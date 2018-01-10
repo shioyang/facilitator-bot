@@ -45,8 +45,11 @@ module.exports = (robot) ->
           obj =
             utt: ""
             age: "30"
-  
-          obj.utt = title if title
+
+          if title
+            title = title.split('|')[0]
+            obj.utt = title.trim() if title
+
           data = JSON.stringify(obj)
           robot.http(dialogue_api)
             .header('Content-Type', 'application/json')
@@ -54,13 +57,14 @@ module.exports = (robot) ->
               if err
                 msg.send "Encountered an error :( #{err}"
                 return
-  
+
               body_obj = JSON.parse body
               # Wait for wait_sec sec
-              wait_sec_list = [30, 40, 50, 60]
+              wait_sec_list = [20, 30, 40, 50]
               wait_sec = msg.random wait_sec_list
               console.log "wait #{wait_sec} sec..."
               setTimeout ->
                 msg.send "#{body_obj.utt}" if body_obj.utt
               , wait_sec * 1000
+
 
