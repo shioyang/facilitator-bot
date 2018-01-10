@@ -40,7 +40,7 @@ module.exports = (robot) ->
         title = xmlDoc.get('//title').text().trim()
 
         if title
-          console.log "[facilitator]   Title: #{title}"
+          console.log "[facilitator]  Fetched title: #{title}"
 
           obj =
             utt: ""
@@ -49,6 +49,7 @@ module.exports = (robot) ->
           if title
             title = title.split('|')[0]
             obj.utt = title.trim() if title
+            console.log "[facilitator]  Used title: #{obj.utt}"
 
           data = JSON.stringify(obj)
           robot.http(dialogue_api)
@@ -66,5 +67,4 @@ module.exports = (robot) ->
               setTimeout ->
                 msg.send "#{body_obj.utt}" if body_obj.utt
               , wait_sec * 1000
-
 
