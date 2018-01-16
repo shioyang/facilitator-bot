@@ -10,6 +10,13 @@ dialogue_api = "https://api.apigw.smt.docomo.ne.jp/dialogue/v1/dialogue?APIKEY="
 module.exports = (robot) ->
 
 
+  robot.enter (res) ->
+    res.send "I'm here!"
+
+  robot.leave (res) ->
+    res.send "I'll be back..."
+
+
   robot.hear /hello/i, (res) ->
     res.send "Hello!"
 
